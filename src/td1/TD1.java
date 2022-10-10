@@ -1,3 +1,5 @@
+package td1;
+
 import java.util.Random;
 
 public class TD1 {
