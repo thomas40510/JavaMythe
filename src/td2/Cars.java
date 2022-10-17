@@ -1,8 +1,11 @@
 package td2;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
-public class TD2 {
+public class Cars {
     public static class Car {
         private final String manufacturer;
         private final Date manDate;
@@ -59,24 +62,19 @@ public class TD2 {
     }
 
     public static class Fleet{
-        private Car[] cars;
+        private List<Car> cars;
         private int nbCars;
 
         public Fleet(Car[] cars){
-            this.cars = cars;
+            this.cars = new ArrayList<>();
+            addCars(cars);
             this.nbCars = cars.length;
         }
         void addCars(Car[] cars){
-            for (Car car : cars) {
-                addCar(car);
-            }
+            this.cars.addAll(Arrays.asList(cars));
         }
         void addCar(Car car){
-            Car[] newCars = new Car[nbCars + 1];
-            if (nbCars >= 0) System.arraycopy(cars, 0, newCars, 0, nbCars);
-            newCars[nbCars] = car;
-            cars = newCars;
-            nbCars++;
+            this.cars.add(car);
         }
 
         void applyDiscount(float discount, int condition){
@@ -100,7 +98,7 @@ public class TD2 {
         Car c4 = new Car(4, "Fiat", new Date(), new Date(), 1000, 2000, 3);
 
         Fleet f = new Fleet(new Car[]{c, c2, c3});
-        f.addCars(new Car[]{c4});
+        f.addCar(c4);
         System.out.println(f.show());
         f.applyDiscount(10, 3);
         System.out.printf(f.show());
