@@ -46,7 +46,7 @@ public class Polygons {
     }
 
     public static class Polygon{
-        private final ArrayList<Point> points;
+        final ArrayList<Point> points;
 
         public Polygon(Point[] points){
             this.points = new ArrayList<>();
@@ -65,18 +65,171 @@ public class Polygons {
             return this.points;
         }
 
-        public double perimeter(){//TODO
-            double res = this.points.get(-1).distance(this.points.get(0));
-            int n = this.points.size();
+        public double perimeter(){
+            // Calculates segment per segment
+            int n = this.points.size() - 1;
+            double res = this.points.get(n).distance(this.points.get(0));
             for(int k = 0; k < n; k++){
                 res += this.points.get(k).distance(this.points.get(k+1));
             }
             return res;
         }
+
+        public double Surface(){
+            return -1;
+        }
+
+        public String edgesAsText(){
+            StringBuilder res = new StringBuilder();
+            for(Point p : this.points){
+                res.append(p.toString()).append(" ");
+            }
+            return res.toString();
+        }
+
+        public boolean equals(Polygon other){
+            if(this.points.size() != other.points.size()){
+                return false;
+            }
+            int n = this.points.size() - 1;
+            Point p0 = this.points.get(0);
+            int m = other.points.indexOf(p0);
+            if(m == -1){
+                return false;
+            }
+            for(int k = 0; k < n; k++){
+                if(!this.points.get(k).equals(other.points.get((m+k)%n))){
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public String toString(){
+            return "Polygon{" + this.edgesAsText() + "}";
+        }
+    }
+
+    public static class Triangle extends Polygon{
+        public Triangle(Point[] points){
+            super(points);
+            if (points.length != 3){
+                throw new IllegalArgumentException("Triangle must have 3 points");
+            }
+        }
+
+        @Override
+        public double Surface(){
+            double a = this.points.get(0).distance(this.points.get(1));
+            double b = this.points.get(1).distance(this.points.get(2));
+            double c = this.points.get(2).distance(this.points.get(0));
+            double p = (a+b+c)/2;
+            return Math.pow(p*(p-a)*(p-b)*(p-c), .5);
+        }
+
+        @Override
+        public String toString(){
+            enum TriangleType{
+                EQUILATERAL, ISOSCELES, SCALENE, RIGHT
+            }
+            TriangleType type;
+            double a = this.points.get(0).distance(this.points.get(1));
+            double b = this.points.get(1).distance(this.points.get(2));
+            double c = this.points.get(2).distance(this.points.get(0));
+            if(sameReal(a, b) && sameReal(b, c)){
+                type = TriangleType.EQUILATERAL;
+            }else if(sameReal(a, b) || sameReal(b, c) || sameReal(c, a)){
+                type = TriangleType.ISOSCELES;
+            }else if(sameReal(Math.pow(a, 2), Math.pow(b, 2) + Math.pow(c, 2))
+                    || sameReal(Math.pow(b, 2), Math.pow(a, 2) + Math.pow(c, 2))
+                    || sameReal(Math.pow(c, 2), Math.pow(a, 2) + Math.pow(b, 2))) {
+                type = TriangleType.RIGHT;
+            } else{
+                type = TriangleType.SCALENE;
+            }
+            return type + " Triangle{" + this.edgesAsText() + "}";
+        }
+    }
+
+    public static class Rectangle extends Polygon{
+        public Rectangle(Point sg, Point id){
+            /* sg = supérieur gauche, id = inférieur droit */
+            super(new Point[]{sg, new Point(id.getX(), sg.getY()),
+                    id, new Point(sg.getX(), id.getY())});
+
+            if (sg.getX() > id.getX() || sg.getY() < id.getY()
+                || sg.getX() == id.getX() || sg.getY() == id.getY()){
+                throw new IllegalArgumentException("Incorrect points");
+            }
+        }
+
+        public double Surface(){
+            double a = this.points.get(0).distance(this.points.get(1));
+            double b = this.points.get(1).distance(this.points.get(2));
+            return a*b;
+        }
+
+        public String toString(){
+            return "Flat Rectangle{" + this.edgesAsText() + "}";
+        }
+    }
+
+    public static class Square extends Rectangle{
+        public Square(Point sg, Point id){
+            super(sg, id);
+            if(this.points.get(0).distance(this.points.get(1))
+                    != this.points.get(1).distance(this.points.get(2))){
+                throw new IllegalArgumentException("This is not a square!");
+            }
+        }
+
+        public double Surface(){
+            double a = this.points.get(0).distance(this.points.get(1));
+            return a*a;
+        }
+
+        public String toString(){
+            return "Flat Square{" + this.edgesAsText() + "}";
+        }
+    }
+
+    public static class PolygonList{
+        private final ArrayList<Polygon> polygons;
+
+        public PolygonList(){
+            this.polygons = new ArrayList<>();
+        }
+
+        public void addPolygon(Polygon p){
+            this.polygons.add(p);
+        }
+
+        public void addPolygons(Polygon[] polygons){
+            this.polygons.addAll(Arrays.asList(polygons));
+        }
+
+        public ArrayList<Polygon> getPolygons(){
+            return this.polygons;
+        }
+
+        public String toString() {
+            StringBuilder res = new StringBuilder();
+            res.append("PolygonList[\n");
+            for (Polygon p : this.polygons) {
+                res.append(p.toString()).append(",\n");
+                res.append("]");
+            }
+            return res.toString();
+        }
     }
 
 
     public static void main(String[] args){
-        System.out.println("hello world!");
+        Point p = new Point(0, 0);
+        Point q = new Point(1, 0);
+        Point r = new Point(1, 1);
+        Point s = new Point(0, 1);
+        Polygon poly = new Polygon(new Point[]{p, q, r, s});
+        System.out.println(poly.perimeter());
     }
 }
