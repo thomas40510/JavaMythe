@@ -84,6 +84,7 @@ public class Polygons {
             for(Point p : this.points){
                 res.append(p.toString()).append(" ");
             }
+            res.replace(res.length()-1, res.length(), "");
             return res.toString();
         }
 
@@ -216,20 +217,46 @@ public class Polygons {
             StringBuilder res = new StringBuilder();
             res.append("PolygonList[\n");
             for (Polygon p : this.polygons) {
-                res.append(p.toString()).append(",\n");
-                res.append("]");
+                res.append("\t").append(p.toString()).append(",\n");
             }
+            res.append("]");
             return res.toString();
         }
     }
 
 
     public static void main(String[] args){
-        Point p = new Point(0, 0);
-        Point q = new Point(1, 0);
-        Point r = new Point(1, 1);
-        Point s = new Point(0, 1);
-        Polygon poly = new Polygon(new Point[]{p, q, r, s});
-        System.out.println(poly.perimeter());
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(1, 0);
+        Point p3 = new Point(1, 1);
+        Point p4 = new Point(0, 1);
+        Point p5 = new Point(2, 2);
+        Point p6 = new Point(3, 2);
+        Point p7 = new Point(3, 3);
+
+        Polygon poly1 = new Polygon(new Point[]{p1, p2, p3, p4});
+        Polygon poly2 = new Polygon(new Point[]{p1, p2, p3, p4});
+        Polygon poly3 = new Polygon(new Point[]{p1, p2, p3, p4, p5});
+
+        System.out.println(poly1.equals(poly2));
+        System.out.println(poly1.equals(poly3));
+
+        Triangle tri1 = new Triangle(new Point[]{p1, p2, p3});
+        Triangle tri2 = new Triangle(new Point[]{p1, p2, p3});
+
+        System.out.println(tri1.equals(tri2));
+
+        Rectangle rect1 = new Rectangle(new Point(0, 2), new Point(2, 0));
+        System.out.println(rect1.Surface());
+
+        Square square1 = new Square(new Point(0, 2), new Point(2, 0));
+        System.out.println(square1.Surface());
+        System.out.println(square1.toString());
+
+        PolygonList list = new PolygonList();
+        list.addPolygon(tri1);
+        list.addPolygon(rect1);
+        list.addPolygons(new Polygon[]{poly1, poly2, poly3});
+        System.out.println(list.toString());
     }
 }
