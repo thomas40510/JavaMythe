@@ -98,3 +98,6 @@ fabric.properties
 
 .idea/
 
+src/td1/Brest.txt
+src/td1/Lyon.txt
+src/td1/Toulouse.txt
