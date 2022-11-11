@@ -2,13 +2,28 @@ package td3;
 import td3.Documents.*;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 public class LibraryMgr {
     /*
     A simple Library Manager
      */
-    private static final Logger LOG = Logger.getLogger(LibraryMgr.class.getName());
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+
+    public static class Log{
+        public void e(String message){
+            System.out.println(ANSI_RED + "[Log/E]: " + message + ANSI_RESET);
+        }
+        public void i(String message){
+            System.out.println("[Log/I]: " + message);
+        }
+        public void d(String message){
+            System.out.println(ANSI_BLUE + "[Log/D]: " + message + ANSI_RESET);
+        }
+    }
+    static Log Log = new Log();
 
     public static class Library{
         private final int size;
@@ -29,9 +44,13 @@ public class LibraryMgr {
             try{
                 return books.get(i);
             } catch(IndexOutOfBoundsException e){
-                LOG.info("Index out of bounds. Document does not exist.");
+                Log.i("Index out of bounds. Document does not exist.");
                 return null;
             }
+        }
+
+        public ArrayList<Document> getDocuments(){
+            return this.books;
         }
 
         public boolean addDocument(Document doc){
@@ -39,7 +58,7 @@ public class LibraryMgr {
                 books.add(doc);
                 return true;
             } else {
-                LOG.info("Library is full.");
+                Log.e("Library is full. Document not added.");
                 return false;
             }
         }
@@ -49,7 +68,7 @@ public class LibraryMgr {
                 books.remove(doc);
                 return true;
             } else {
-                LOG.info("Document does not exist in library.");
+                Log.i("Document does not exist in library.");
                 return false;
             }
         }

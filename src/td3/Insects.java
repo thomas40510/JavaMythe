@@ -1,10 +1,9 @@
 package td3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
-public class Insects {
+public class Insects{
     public static class Insect{
         private int hunger;
         private int lastMeal;
