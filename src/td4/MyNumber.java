@@ -1,6 +1,9 @@
 package td4;
 
+import utilities.Log;
+
 public class MyNumber {
+    Log Log = new Log();
     private int number;
 
     public MyNumber(){
@@ -35,7 +38,7 @@ public class MyNumber {
         try{
             return new MyNumber(this.number / other.number);
         } catch(ArithmeticException e){
-            System.out.println("Error: " + e.getMessage());
+            Log.e("Division by zero");
             return null;
         }
     }
