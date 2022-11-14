@@ -1,9 +1,9 @@
 package td4;
 
-import utilities.Log;
+import utilities.Logger;
 
 public class MyNumber {
-    Log Log = new Log();
+    Logger Log = new Logger();
     private int number;
 
     public MyNumber(){

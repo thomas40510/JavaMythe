@@ -1,6 +1,6 @@
 package td3;
 import td3.Documents.*;
-import utilities.Log;
+import utilities.Logger;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class LibraryMgr {
     /*
     A simple Library Manager
      */
-    static Log Log = new Log();
+    static Logger Log = new Logger();
 
     public static class Library{
         private final int size;

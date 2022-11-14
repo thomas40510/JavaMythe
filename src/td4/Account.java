@@ -1,6 +1,6 @@
 package td4;
 
-import utilities.Log;
+import utilities.Logger;
 
 public class Account {
     private final String name;
@@ -8,7 +8,7 @@ public class Account {
     private int maxWithdrawal;
     private int maxDeficit;
 
-    Log Log = new Log();
+    Logger Log = new Logger();
 
     public Account (String name, int balance){
         this.name = name;
